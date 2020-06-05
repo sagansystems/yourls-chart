@@ -93,7 +93,7 @@ spec:
               containerPort: 443
           livenessProbe:
             httpGet:
-              path: /admin/
+              path: /admin/install.php
             {{- if not .Values.healthcheckHttps }}
               port: http
             {{- else }}
@@ -104,7 +104,7 @@ spec:
           readinessProbe:
           {{- if not .Values.disableAdminPanelReadinessProbe }}
             httpGet:
-              path: /admin/
+              path: /admin/install.php
             {{- if not .Values.healthcheckHttps }}
               port: http
             {{- else }}
