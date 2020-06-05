@@ -129,25 +129,45 @@ service:
   annotations: {}
 
 ## Allow health checks to be pointed at the https port
+##
 healthcheckHttps: false
 
-## Disables readiness probe
-disableAdminPanelReadinessProbe: false
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## YOURLS pod extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
 livenessProbe:
+  enabled: true
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
 readinessProbe:
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+
+## Custom liveness and readiness probes, it overrides the default one (evaluated as a template)
+##
+customLivenessProbe: {}
+customReadinessProbe: {}
+
+## If using an HTTPS-terminating load-balancer, the probes may need to behave
+## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
+## docs, 302 should be considered "successful", but this issue on GitHub
+## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
+##
+# livenessProbeHeaders:
+# - name: X-Forwarded-Proto
+#   value: https
+# readinessProbeHeaders:
+# - name: X-Forwarded-Proto
+#   value: https
+livenessProbeHeaders: {}
+readinessProbeHeaders: {}
 
 ## Configure the ingress resource that allows you to access the
 ## YOURLS installation. Set up the URL

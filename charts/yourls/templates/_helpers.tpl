@@ -54,6 +54,19 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Renders a value that contains template.
+Usage:
+{{ include "yourls.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "yourls.tplValue" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "metrics.image" -}}
